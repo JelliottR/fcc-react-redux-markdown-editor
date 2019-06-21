@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { connect } from "react-redux";
+import "semantic-ui-css/semantic.min.css";
 
-function App() {
+import { MDHandleChange } from "./redux/markdownActions";
+
+import { Header, Grid, Form, TextArea } from "semantic-ui-react";
+
+const marked = window.marked;
+
+function App(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Grid columns="two">
+        <Grid.Column>
+          <Header as="h1">Markdown</Header>
+          <Form>
+            <TextArea
+              rows="30"
+              onChange={event => props.dispatch(MDHandleChange(event))}
+              value={props.markdownText}
+            />
+          </Form>
+        </Grid.Column>
+        <Grid.Column>
+          <Header as="h1">Preview</Header>
+          <Form>
+            <TextArea rows="30" value={marked(props.markdownText)} />
+          </Form>
+        </Grid.Column>
+      </Grid>
     </div>
   );
 }
 
-export default App;
+const MapStateToProps = state => ({
+  markdownText: state.markdownText
+});
+
+export default connect(MapStateToProps)(App);
