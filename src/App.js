@@ -1,42 +1,21 @@
-import React from "react";
-import "./App.css";
-import { connect } from "react-redux";
-import "semantic-ui-css/semantic.min.css";
+import React from 'react';
 
-import renderHTML from "react-render-html";
+import { css } from 'aphrodite';
+import { s_App, heading } from './components/styles/main';
 
-import { MDHandleChange } from "./redux/markdownActions";
-import { Header, Grid, Form, TextArea } from "semantic-ui-react";
+import MarkdownEditorWindow from './components/markdown-editor-window';
+import MarkdownPreviewWindow from './components/markdown-preview-window';
 
-const marked = window.marked;
-marked.setOptions({ breaks: true });
+import 'semantic-ui-css/semantic.min.css';
 
-function App(props) {
-  return (
-    <div>
-      <Grid columns="two">
-        <Grid.Column>
-          <Header as="h1">Markdown</Header>
-          <Form>
-            <TextArea
-              id="editor"
-              rows="30"
-              onChange={event => props.dispatch(MDHandleChange(event))}
-              value={props.markdownText}
-            />
-          </Form>
-        </Grid.Column>
-        <Grid.Column>
-          <Header as="h1">Preview</Header>
-          <div id="preview">{renderHTML(marked(props.markdownText))}</div>
-        </Grid.Column>
-      </Grid>
-    </div>
-  );
-}
+const App = () => {
+	return (
+		<div className={css(s_App.grid)}>
+			<p className={css(heading.text)}>Markdown Editor</p>
+			<MarkdownEditorWindow />
+			<MarkdownPreviewWindow />
+		</div>
+	);
+};
 
-const MapStateToProps = state => ({
-  markdownText: state.markdownText
-});
-
-export default connect(MapStateToProps)(App);
+export default App;
